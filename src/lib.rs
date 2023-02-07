@@ -55,7 +55,6 @@
 //! ```
 // #![warn(missing_docs)]
 
-use duckdb_bindings::ffi as ffi;
 
 use std::cell::RefCell;
 use std::convert;
@@ -78,7 +77,7 @@ pub use crate::cache::CachedStatement;
 pub use crate::column::Column;
 pub use crate::config::{AccessMode, Config, DefaultNullOrder, DefaultOrder};
 pub use crate::error::Error;
-pub use duckdb_bindings::ErrorCode;
+pub use crate::ffi_error::ErrorCode;
 pub use crate::params::{params_from_iter, Params, ParamsFromIter};
 #[cfg(feature = "r2d2")]
 pub use crate::r2d2::DuckdbConnectionManager;
@@ -90,6 +89,16 @@ pub use crate::types::ToSql;
 // re-export dependencies from arrow-rs to minimise version maintenance for crate users
 pub use arrow;
 
+#[allow(non_upper_case_globals)]
+#[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
+#[allow(unused)]
+#[allow(improper_ctypes)]
+#[allow(clippy::upper_case_acronyms)]
+#[allow(rustdoc::broken_intra_doc_links)]
+pub mod ffi;
+
+mod ffi_error;
 #[macro_use]
 mod error;
 mod appender;
@@ -112,12 +121,17 @@ mod transaction;
 pub mod table_function;
 pub mod types;
 
+use ffi::{duckdb_state_DuckDBError, duckdb_state_DuckDBSuccess, duckdb_state};
 use table_function::TableFunction;
 
 pub(crate) mod util;
 
 // Number of cached prepared statements we'll hold on to.
 const STATEMENT_CACHE_DEFAULT_CAPACITY: usize = 16;
+
+
+pub const DuckDBError: duckdb_state = duckdb_state_DuckDBError;
+pub const DuckDBSuccess: duckdb_state = duckdb_state_DuckDBSuccess;
 
 /// A macro making it more convenient to pass heterogeneous or long lists of
 /// parameters as a `&[&dyn ToSql]`.

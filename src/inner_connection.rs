@@ -4,9 +4,10 @@ use std::os::raw::c_char;
 use std::ptr;
 use std::str;
 
-use super::ffi;
+use crate::ffi;
 use super::{Appender, Config, Connection, Result};
 use crate::error::{result_from_duckdb_appender, result_from_duckdb_arrow, result_from_duckdb_prepare, Error};
+use crate::ffi_error;
 use crate::raw_statement::RawStatement;
 use crate::statement::Statement;
 use crate::table_function::TableFunction;
@@ -22,10 +23,10 @@ impl InnerConnection {
     pub unsafe fn new(db: ffi::duckdb_database, owned: bool) -> Result<InnerConnection> {
         let mut con: ffi::duckdb_connection = ptr::null_mut();
         let r = ffi::duckdb_connect(db, &mut con);
-        if r != duckdb_bindings::DuckDBSuccess {
+        if r != crate::DuckDBSuccess {
             ffi::duckdb_disconnect(&mut con);
             return Err(Error::DuckDBFailure(
-                duckdb_bindings::Error::new(r),
+                ffi_error::Error::new(r),
                 Some("connect error".to_owned()),
             ));
         }
@@ -39,10 +40,10 @@ impl InnerConnection {
             let mut db: ffi::duckdb_database = ptr::null_mut();
             let mut c_err = std::ptr::null_mut();
             let r = ffi::duckdb_open_ext(c_path.as_ptr(), &mut db, config.duckdb_config(), &mut c_err);
-            if r != duckdb_bindings::DuckDBSuccess {
+            if r != crate::DuckDBSuccess {
                 let msg = Some(CStr::from_ptr(c_err).to_string_lossy().to_string());
                 ffi::duckdb_free(c_err as *mut c_void);
-                return Err(Error::DuckDBFailure(duckdb_bindings::Error::new(r), msg));
+                return Err(Error::DuckDBFailure(ffi_error::Error::new(r), msg));
             }
             println!("Opened db at {:#?}", db);
 

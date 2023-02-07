@@ -31,7 +31,7 @@ impl Sql {
             Ok(())
         } else {
             Err(Error::DuckDBFailure(
-                duckdb_bindings::Error::new(duckdb_bindings::DuckDBError),
+                crate::ffi_error::Error::new(crate::DuckDBError),
                 Some(format!("Invalid keyword \"{}\"", keyword)),
             ))
         }
@@ -72,7 +72,7 @@ impl Sql {
             }
             _ => {
                 return Err(Error::DuckDBFailure(
-                    duckdb_bindings::Error::new(duckdb_bindings::DuckDBError),
+                    crate::ffi_error::Error::new(crate::DuckDBError),
                     Some(format!("Unsupported value \"{:?}\"", value)),
                 ));
             }

@@ -85,7 +85,7 @@ impl RawStatement {
             let mut arrays = &FFI_ArrowArray::empty();
             let arrays = &mut arrays;
             if ffi::duckdb_query_arrow_array(self.result_unwrap(), arrays as *mut _ as *mut *mut c_void)
-                != duckdb_bindings::DuckDBSuccess
+                != crate::DuckDBSuccess
             {
                 return None;
             }
@@ -96,7 +96,7 @@ impl RawStatement {
             let mut schema = &FFI_ArrowSchema::empty();
             let schema = &mut schema;
             if ffi::duckdb_query_arrow_schema(self.result_unwrap(), schema as *mut _ as *mut *mut c_void)
-                != duckdb_bindings::DuckDBSuccess
+                != crate::DuckDBSuccess
             {
                 return None;
             }
@@ -179,7 +179,7 @@ impl RawStatement {
             let rows_changed = ffi::duckdb_arrow_rows_changed(out);
             let mut c_schema = Arc::into_raw(Arc::new(FFI_ArrowSchema::empty()));
             let rc = ffi::duckdb_query_arrow_schema(out, &mut c_schema as *mut _ as *mut *mut c_void);
-            if rc != duckdb_bindings::DuckDBSuccess {
+            if rc != crate::DuckDBSuccess {
                 Arc::from_raw(c_schema);
                 result_from_duckdb_arrow(rc, out)?;
             }

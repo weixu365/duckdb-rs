@@ -53,7 +53,7 @@ strum = { version = "0.24", features = ["derive"] }
 r2d2 = { version = "0.8.9", optional = true }
 num-derive = { version = "0.3.3" }
 num-traits = { version = "0.2.15" }
-duckdb-bindings = {path="../duckdb-bindings"}
+# duckdb-bindings = {path="../duckdb-bindings"}
 
 [dev-dependencies]
 doc-comment = "0.3"
@@ -83,3 +83,9 @@ default-target = "x86_64-unknown-linux-gnu"
 [package.metadata.playground]
 features = []
 all-features = false
+
+
+[build-dependencies]
+bindgen = "0.63.0"
+build_script = "0.2.0"
+cc = "1.0.78"

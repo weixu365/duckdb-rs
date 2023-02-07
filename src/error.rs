@@ -1,5 +1,7 @@
 use super::Result;
+use crate::DuckDBSuccess;
 use crate::ffi;
+use crate::ffi_error;
 use crate::types::FromSqlError;
 use crate::types::Type;
 use std::error;
@@ -8,13 +10,14 @@ use std::fmt;
 use std::path::PathBuf;
 use std::str;
 
+
 /// Enum listing possible errors from duckdb.
 #[derive(Debug)]
 #[allow(clippy::enum_variant_names)]
 #[non_exhaustive]
 pub enum Error {
     /// An error from an underlying DuckDB call.
-    DuckDBFailure(duckdb_bindings::Error, Option<String>),
+    DuckDBFailure(ffi_error::Error, Option<String>),
 
     /// Error when the value of a particular column is requested, but it cannot
     /// be converted to the requested Rust type.
@@ -216,13 +219,13 @@ impl error::Error for Error {
 
 #[inline]
 fn error_from_duckdb_code(code: ffi::duckdb_state, message: Option<String>) -> Result<()> {
-    Err(Error::DuckDBFailure(duckdb_bindings::Error::new(code), message))
+    Err(Error::DuckDBFailure(ffi_error::Error::new(code), message))
 }
 
 #[cold]
 #[inline]
 pub fn result_from_duckdb_appender(code: ffi::duckdb_state, mut appender: ffi::duckdb_appender) -> Result<()> {
-    if code == duckdb_bindings::DuckDBSuccess {
+    if code == DuckDBSuccess {
         return Ok(());
     }
     unsafe {
@@ -241,7 +244,7 @@ pub fn result_from_duckdb_appender(code: ffi::duckdb_state, mut appender: ffi::d
 #[cold]
 #[inline]
 pub fn result_from_duckdb_prepare(code: ffi::duckdb_state, mut prepare: ffi::duckdb_prepared_statement) -> Result<()> {
-    if code == duckdb_bindings::DuckDBSuccess {
+    if code == DuckDBSuccess {
         return Ok(());
     }
     unsafe {
@@ -260,7 +263,7 @@ pub fn result_from_duckdb_prepare(code: ffi::duckdb_state, mut prepare: ffi::duc
 #[cold]
 #[inline]
 pub fn result_from_duckdb_arrow(code: ffi::duckdb_state, mut out: ffi::duckdb_arrow) -> Result<()> {
-    if code == duckdb_bindings::DuckDBSuccess {
+    if code == DuckDBSuccess {
         return Ok(());
     }
     unsafe {
