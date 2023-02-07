@@ -17,13 +17,13 @@ categories = ["database"]
 [lib]
 name = "duckdb"
 
-[workspace]
-members = ["libduckdb-sys"]
+# [workspace]
+# members = ["libduckdb-sys"]
 
 [features]
 default = []
-bundled = ["libduckdb-sys/bundled"]
-buildtime_bindgen = ["libduckdb-sys/buildtime_bindgen"]
+# bundled = ["libduckdb-sys/bundled"]
+# buildtime_bindgen = ["libduckdb-sys/buildtime_bindgen"]
 modern-full = [
     "chrono",
     "serde_json",
@@ -47,12 +47,13 @@ memchr = "2.3"
 uuid = { version = "1.0", optional = true }
 smallvec = "1.6.1"
 cast = { version = "0.3", features = ["std"] }
-arrow = { version = "29", default-features = false, features = ["prettyprint", "ffi"] }
+arrow = { version = "31.0.0", default-features = false, features = ["prettyprint", "ffi"] }
 rust_decimal = "1.14"
 strum = { version = "0.24", features = ["derive"] }
 r2d2 = { version = "0.8.9", optional = true }
 num-derive = { version = "0.3.3" }
 num-traits = { version = "0.2.15" }
+duckdb-bindings = {path="../duckdb-bindings"}
 
 [dev-dependencies]
 doc-comment = "0.3"
@@ -69,9 +70,9 @@ tempdir = "0.3.7"
 # name = "data_types"
 # harness = false
 
-[dependencies.libduckdb-sys]
-path = "libduckdb-sys"
-version = "0.6.1"
+# [dependencies.libduckdb-sys]
+# path = "libduckdb-sys"
+# version = "0.6.1"
 
 [package.metadata.docs.rs]
 features = []

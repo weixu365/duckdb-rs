@@ -3,7 +3,6 @@
 use std::ops::Deref;
 
 use crate::error::Error;
-use crate::ffi;
 use crate::types::{ToSql, ToSqlOutput, ValueRef};
 use crate::{Connection, DatabaseName, Result, Row};
 
@@ -32,7 +31,7 @@ impl Sql {
             Ok(())
         } else {
             Err(Error::DuckDBFailure(
-                ffi::Error::new(ffi::DuckDBError),
+                duckdb_bindings::Error::new(duckdb_bindings::DuckDBError),
                 Some(format!("Invalid keyword \"{}\"", keyword)),
             ))
         }
@@ -73,7 +72,7 @@ impl Sql {
             }
             _ => {
                 return Err(Error::DuckDBFailure(
-                    ffi::Error::new(ffi::DuckDBError),
+                    duckdb_bindings::Error::new(duckdb_bindings::DuckDBError),
                     Some(format!("Unsupported value \"{:?}\"", value)),
                 ));
             }

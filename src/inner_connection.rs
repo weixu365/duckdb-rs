@@ -22,13 +22,15 @@ impl InnerConnection {
     pub unsafe fn new(db: ffi::duckdb_database, owned: bool) -> Result<InnerConnection> {
         let mut con: ffi::duckdb_connection = ptr::null_mut();
         let r = ffi::duckdb_connect(db, &mut con);
-        if r != ffi::DuckDBSuccess {
+        if r != duckdb_bindings::DuckDBSuccess {
             ffi::duckdb_disconnect(&mut con);
             return Err(Error::DuckDBFailure(
-                ffi::Error::new(r),
+                duckdb_bindings::Error::new(r),
                 Some("connect error".to_owned()),
             ));
         }
+
+        println!("Return InterConnection, db address is {:#?}", db);
         Ok(InnerConnection { db, con, owned })
     }
 
@@ -37,11 +39,13 @@ impl InnerConnection {
             let mut db: ffi::duckdb_database = ptr::null_mut();
             let mut c_err = std::ptr::null_mut();
             let r = ffi::duckdb_open_ext(c_path.as_ptr(), &mut db, config.duckdb_config(), &mut c_err);
-            if r != ffi::DuckDBSuccess {
+            if r != duckdb_bindings::DuckDBSuccess {
                 let msg = Some(CStr::from_ptr(c_err).to_string_lossy().to_string());
                 ffi::duckdb_free(c_err as *mut c_void);
-                return Err(Error::DuckDBFailure(ffi::Error::new(r), msg));
+                return Err(Error::DuckDBFailure(duckdb_bindings::Error::new(r), msg));
             }
+            println!("Opened db at {:#?}", db);
+
             InnerConnection::new(db, true)
         }
     }

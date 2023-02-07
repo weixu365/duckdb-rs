@@ -84,8 +84,13 @@ pub const DUCKDB_API_0_3_1: u32 = 1;
 pub const DUCKDB_API_0_3_2: u32 = 2;
 pub const DUCKDB_API_LATEST: u32 = 2;
 pub const DUCKDB_API_VERSION: u32 = 2;
-pub const true_: u32 = 1;
-pub const false_: u32 = 0;
+pub const _LIBCPP_VERSION: u32 = 13000;
+pub const _LIBCPP_ABI_VERSION: u32 = 1;
+pub const _LIBCPP_STD_VER: u32 = 11;
+pub const _LIBCPP_OBJECT_FORMAT_MACHO: u32 = 1;
+pub const _LIBCPP_HIDE_FROM_ABI_PER_TU: u32 = 1;
+pub const _LIBCPP_DEBUG_LEVEL: u32 = 0;
+pub const _LIBCPP_LOCALE__L_EXTENSIONS: u32 = 1;
 pub const __bool_true_false_are_defined: u32 = 1;
 pub const __WORDSIZE: u32 = 64;
 pub const __DARWIN_ONLY_64_BIT_INO_T: u32 = 0;
@@ -212,6 +217,7 @@ pub const __MAC_12_1: u32 = 120100;
 pub const __MAC_12_2: u32 = 120200;
 pub const __MAC_12_3: u32 = 120300;
 pub const __MAC_13_0: u32 = 130000;
+pub const __MAC_13_1: u32 = 130100;
 pub const __IPHONE_2_0: u32 = 20000;
 pub const __IPHONE_2_1: u32 = 20100;
 pub const __IPHONE_2_2: u32 = 20200;
@@ -274,6 +280,7 @@ pub const __IPHONE_15_3: u32 = 150300;
 pub const __IPHONE_15_4: u32 = 150400;
 pub const __IPHONE_16_0: u32 = 160000;
 pub const __IPHONE_16_1: u32 = 160100;
+pub const __IPHONE_16_2: u32 = 160200;
 pub const __TVOS_9_0: u32 = 90000;
 pub const __TVOS_9_1: u32 = 90100;
 pub const __TVOS_9_2: u32 = 90200;
@@ -309,6 +316,7 @@ pub const __TVOS_15_3: u32 = 150300;
 pub const __TVOS_15_4: u32 = 150400;
 pub const __TVOS_16_0: u32 = 160000;
 pub const __TVOS_16_1: u32 = 160100;
+pub const __TVOS_16_2: u32 = 160200;
 pub const __WATCHOS_1_0: u32 = 10000;
 pub const __WATCHOS_2_0: u32 = 20000;
 pub const __WATCHOS_2_1: u32 = 20100;
@@ -342,6 +350,7 @@ pub const __WATCHOS_8_4: u32 = 80400;
 pub const __WATCHOS_8_5: u32 = 80500;
 pub const __WATCHOS_9_0: u32 = 90000;
 pub const __WATCHOS_9_1: u32 = 90100;
+pub const __WATCHOS_9_2: u32 = 90200;
 pub const MAC_OS_X_VERSION_10_0: u32 = 1000;
 pub const MAC_OS_X_VERSION_10_1: u32 = 1010;
 pub const MAC_OS_X_VERSION_10_2: u32 = 1020;
@@ -380,7 +389,7 @@ pub const MAC_OS_VERSION_13_0: u32 = 130000;
 pub const __DRIVERKIT_19_0: u32 = 190000;
 pub const __DRIVERKIT_20_0: u32 = 200000;
 pub const __DRIVERKIT_21_0: u32 = 210000;
-pub const __MAC_OS_X_VERSION_MAX_ALLOWED: u32 = 130000;
+pub const __MAC_OS_X_VERSION_MAX_ALLOWED: u32 = 130100;
 pub const __ENABLE_LEGACY_MAC_AVAILABILITY: u32 = 1;
 pub const __DARWIN_WCHAR_MIN: i32 = -2147483648;
 pub const _FORTIFY_SOURCE: u32 = 2;
@@ -10375,11 +10384,10 @@ extern "C" {
     ) -> pid_t;
 }
 extern "C" {
-    pub fn alloca(arg1: ::std::os::raw::c_ulong) -> *mut ::std::os::raw::c_void;
+    pub fn alloca(arg1: usize) -> *mut ::std::os::raw::c_void;
 }
 pub type ct_rune_t = __darwin_ct_rune_t;
 pub type rune_t = __darwin_rune_t;
-pub type wchar_t = __darwin_wchar_t;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct div_t {
@@ -10477,25 +10485,22 @@ extern "C" {
     pub static mut __mb_cur_max: ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn malloc(__size: ::std::os::raw::c_ulong) -> *mut ::std::os::raw::c_void;
+    pub fn malloc(__size: usize) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
-    pub fn calloc(__count: ::std::os::raw::c_ulong, __size: ::std::os::raw::c_ulong) -> *mut ::std::os::raw::c_void;
+    pub fn calloc(__count: usize, __size: usize) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
     pub fn free(arg1: *mut ::std::os::raw::c_void);
 }
 extern "C" {
-    pub fn realloc(__ptr: *mut ::std::os::raw::c_void, __size: ::std::os::raw::c_ulong) -> *mut ::std::os::raw::c_void;
+    pub fn realloc(__ptr: *mut ::std::os::raw::c_void, __size: usize) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
     pub fn valloc(arg1: usize) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
-    pub fn aligned_alloc(
-        __alignment: ::std::os::raw::c_ulong,
-        __size: ::std::os::raw::c_ulong,
-    ) -> *mut ::std::os::raw::c_void;
+    pub fn aligned_alloc(__alignment: usize, __size: usize) -> *mut ::std::os::raw::c_void;
 }
 extern "C" {
     pub fn posix_memalign(
@@ -10564,10 +10569,10 @@ extern "C" {
     pub fn mblen(__s: *const ::std::os::raw::c_char, __n: usize) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn mbstowcs(arg1: *mut wchar_t, arg2: *const ::std::os::raw::c_char, arg3: usize) -> usize;
+    pub fn mbstowcs(arg1: *mut u32, arg2: *const ::std::os::raw::c_char, arg3: usize) -> usize;
 }
 extern "C" {
-    pub fn mbtowc(arg1: *mut wchar_t, arg2: *const ::std::os::raw::c_char, arg3: usize) -> ::std::os::raw::c_int;
+    pub fn mbtowc(arg1: *mut u32, arg2: *const ::std::os::raw::c_char, arg3: usize) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn qsort(
@@ -10629,10 +10634,10 @@ extern "C" {
     pub fn system(arg1: *const ::std::os::raw::c_char) -> ::std::os::raw::c_int;
 }
 extern "C" {
-    pub fn wcstombs(arg1: *mut ::std::os::raw::c_char, arg2: *const wchar_t, arg3: usize) -> usize;
+    pub fn wcstombs(arg1: *mut ::std::os::raw::c_char, arg2: *const u32, arg3: usize) -> usize;
 }
 extern "C" {
-    pub fn wctomb(arg1: *mut ::std::os::raw::c_char, arg2: wchar_t) -> ::std::os::raw::c_int;
+    pub fn wctomb(arg1: *mut ::std::os::raw::c_char, arg2: u32) -> ::std::os::raw::c_int;
 }
 extern "C" {
     pub fn _Exit(arg1: ::std::os::raw::c_int) -> !;
@@ -12694,6 +12699,20 @@ extern "C" {
 extern "C" {
     #[doc = "Destroys the task state returned from duckdb_create_task_state.\n\nNote that this should not be called while there is an active duckdb_execute_tasks_state running\non the task state.\n\n state: The task state to clean up"]
     pub fn duckdb_destroy_task_state(state: duckdb_task_state);
+}
+extern "C" {
+    pub fn duckdb_create_union(
+        nmembers: idx_t,
+        names: *mut *const ::std::os::raw::c_char,
+        types: *const duckdb_logical_type,
+    ) -> duckdb_logical_type;
+}
+extern "C" {
+    pub fn duckdb_create_struct_type(
+        n_pairs: idx_t,
+        names: *mut *const ::std::os::raw::c_char,
+        types: *const duckdb_logical_type,
+    ) -> duckdb_logical_type;
 }
 pub type __builtin_va_list = [__va_list_tag; 1usize];
 #[repr(C)]

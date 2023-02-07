@@ -102,7 +102,7 @@ impl Config {
         if self.config.is_none() {
             let mut config: ffi::duckdb_config = ptr::null_mut();
             let state = unsafe { ffi::duckdb_create_config(&mut config) };
-            assert_eq!(state, ffi::DuckDBSuccess);
+            assert_eq!(state, duckdb_bindings::DuckDBSuccess);
             self.config = Some(config);
         }
         let c_key = CString::new(key).unwrap();
@@ -114,9 +114,9 @@ impl Config {
                 c_value.as_ptr() as *const c_char,
             )
         };
-        if state != ffi::DuckDBSuccess {
+        if state != duckdb_bindings::DuckDBSuccess {
             return Err(Error::DuckDBFailure(
-                ffi::Error::new(state),
+                duckdb_bindings::Error::new(state),
                 Some(format!("set {}:{} error", key, value)),
             ));
         }

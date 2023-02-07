@@ -53,9 +53,9 @@
 //!     Ok(())
 //! }
 //! ```
-#![warn(missing_docs)]
+// #![warn(missing_docs)]
 
-pub use libduckdb_sys as ffi;
+use duckdb_bindings::ffi as ffi;
 
 use std::cell::RefCell;
 use std::convert;
@@ -78,7 +78,7 @@ pub use crate::cache::CachedStatement;
 pub use crate::column::Column;
 pub use crate::config::{AccessMode, Config, DefaultNullOrder, DefaultOrder};
 pub use crate::error::Error;
-pub use crate::ffi::ErrorCode;
+pub use duckdb_bindings::ErrorCode;
 pub use crate::params::{params_from_iter, Params, ParamsFromIter};
 #[cfg(feature = "r2d2")]
 pub use crate::r2d2::DuckdbConnectionManager;
@@ -204,7 +204,7 @@ pub const TEMP_DB: DatabaseName<'static> = DatabaseName::Temp;
 
 /// A connection to a DuckDB database.
 pub struct Connection {
-    db: RefCell<InnerConnection>,
+    pub db: RefCell<InnerConnection>,
     cache: StatementCache,
     path: Option<PathBuf>,
 }
